@@ -5,12 +5,21 @@ from flask_cors import CORS
 app = Flask(__name__,
             static_folder = "./dist/static",
             template_folder = "./dist")
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/api/random')
 def random_number():
     response = {
         'randomNumber': randint(1, 100)
+    }
+    return jsonify(response)
+
+
+@app.route('/artist/<name>')
+def get_artist_score(name):
+    response = {
+        'name': name,
+        'score': 90
     }
     return jsonify(response)
 

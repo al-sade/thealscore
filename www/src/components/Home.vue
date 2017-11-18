@@ -1,21 +1,35 @@
 <template>
   <div>
-    <p>Home page</p>
-    <p>Random number from backend: {{ randomNumber }}</p>
-    <button @click="getRandom">New random number</button>
+    <input id="tas-search" type="search" v-model="artist" />
+    <button @click="getScore">GO!</button>
+    <h1>{{ this.score }}</h1>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+/* eslint-disable */
+  import axios from 'axios';
 export default {
 
   data () {
     return {
-      randomNumber: 0
+      randomNumber: 0,
+      artist: '',
+      score: '7'
     }
   },
   methods: {
+  getScore () {
+      const path = "http://localhost:5000/artist/" + this.artist
+      axios.get(path)
+      .then(response => {
+        console.log(response.data)
+        this.score = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
     getRandomInt (min, max) {
       min = Math.ceil(min)
       max = Math.floor(max)
