@@ -4,7 +4,7 @@ from flask_cors import CORS
 import json
 
 #handlers
-from handlers.spotify import spotifyHandler
+from handlers.spotify import SpotifyHandler
 
 app = application =Flask(__name__,
             static_folder = "./dist/static",
@@ -13,7 +13,7 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/artist/<name>')
 def get_artist_score(name):
-    spotify = spotifyHandler()
+    spotify = SpotifyHandler()
     spotify_score = spotify.getArtist(name)
     response = {
         'score': spotify_score
