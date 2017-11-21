@@ -16,7 +16,9 @@
   "dependencies": {
     "axios": "^0.17.1",
     "babel": "^6.23.0",
+    "element-ui": "^2.0.5",
     "vue": "^2.5.2",
+    "vue-chart-js": "^1.4.1",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
