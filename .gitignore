@@ -1,20 +1,16 @@
-<<<<<<< HEAD
 dist/
 .idea/
+config.py
+/env
 
-=======
->>>>>>> 54fd4c680115cbd03ac09d2d53e7cb2ea989ef35
 # Logs
 logs
 *.log
 npm-debug.log*
 
 # Node.js
-<<<<<<< HEAD
 www/node_modules/
-=======
 frontend/node_modules/
->>>>>>> 54fd4c680115cbd03ac09d2d53e7cb2ea989ef35
 
 
 # Python
