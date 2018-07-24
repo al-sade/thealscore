@@ -1,50 +1,57 @@
 <template>
   <div>
-    <input id="tas-search" type="search" v-model="artist" />
-    <button @click="getScore">GO!</button>
-    <h1>{{ }}</h1>
+    <h1>Home page</h1>
 
-    <el-progress type="circle" :percentage="this._spotifyScore"></el-progress>
-
+    <input class="tas-search" type="search" v-model="artist"/>
+    <button class="tas-search" @click="getScore">GO!</button>
+    <p>spotify score: {{spotifyScore}}</p>
+    <chart ref="chart"></chart>
   </div>
 </template>
 
 <script>
-/* eslint-disable */
+  /* eslint-disable */
   import axios from 'axios';
-  import VueChart from 'vue-chart-js'
-
 
   export default {
+    components: {
+      "chart": require("./Chart.vue").default
+    },
+    data() {
+      return {
 
-  components: {
-    VueChart
-  },
-  data () {
-    return {
-      artist: '',
-      spotifyScore: '',
-    }
-  },
-  methods: {
-  getScore () {
-      const path = "http://localhost:5000/artist/" + this.artist
-      axios.get(path)
-      .then(response => {
-        this.spotifyScore = response.data.score['artists']['items'][0]['popularity']
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  },
+        dataFormat: 'json',
+        artist: '',
+        spotifyScore: '',
+        showPie: false,
 
-  },
-  created () {
-  },
-  computed: {
-    _spotifyScore: function () {
-      return this.spotifyScore ? parseInt(this.spotifyScore) : 0
+      }
+    },
+    methods: {
+      getScore() {
+        const path = "http://localhost:5000/artist/" + this.artist
+        axios.get(path)
+          .then(response => {
+            this.spotifyScore = response.data.score;
+            this.showPie = true;
+            console.log(this.spotifyScore)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
+
+    },
+    created() {
+    },
+    computed: {
+      _spotifyScore: function () {
+        return this.spotifyScore ? parseInt(this.spotifyScore) : 0
+      }
     }
   }
-}
 </script>
+
+<style>
+
+</style>

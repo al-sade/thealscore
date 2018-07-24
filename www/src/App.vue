@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <h1>The Al Score</h1>
-    <h3>How popular are they?</h3>
     <router-view/>
   </div>
 </template>

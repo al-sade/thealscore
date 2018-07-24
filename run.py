@@ -1,24 +1,21 @@
 from flask import Flask, render_template, jsonify
-from random import *
 from flask_cors import CORS
-import json
+from handlers.calc import Calculator
 
-#handlers
-from handlers.spotify import SpotifyHandler
-
-app = application =Flask(__name__,
-            static_folder = "./dist/static",
-            template_folder = "./dist")
+app = application = Flask(__name__,
+                          static_folder="./dist/static",
+                          template_folder="./dist")
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 @app.route('/artist/<name>')
 def get_artist_score(name):
-    spotify = SpotifyHandler()
-    spotify_score = spotify.getArtist(name)
+    score = Calculator(name).final_score
     response = {
-        'score': spotify_score
+        'score': score
     }
     return jsonify(response)
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
