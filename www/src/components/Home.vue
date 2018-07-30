@@ -1,11 +1,8 @@
 <template>
   <div>
-    <h1>Home page</h1>
-
     <input class="tas-search" type="search" v-model="artist"/>
     <button class="tas-search" @click="getScore">GO!</button>
-    <p>spotify score: {{spotifyScore}}</p>
-    <chart ref="chart"></chart>
+    <chart v-if="showPie" ref="chart" :score="spotifyScore"></chart>
   </div>
 </template>
 
@@ -29,7 +26,7 @@
     },
     methods: {
       getScore() {
-        const path = "http://localhost:5000/artist/" + this.artist
+        const path = "http://localhost:5000/artist/" + this.artist;
         axios.get(path)
           .then(response => {
             this.spotifyScore = response.data.score;
@@ -45,7 +42,7 @@
     created() {
     },
     computed: {
-      _spotifyScore: function () {
+      _spotifyScore () {
         return this.spotifyScore ? parseInt(this.spotifyScore) : 0
       }
     }
