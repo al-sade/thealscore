@@ -1,18 +1,27 @@
 from flask import Flask, render_template, jsonify
 from flask_cors import CORS
 from handlers.calc import Calculator
+from config import Config
+
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
 
 app = application = Flask(__name__,
                           static_folder="./dist/static",
                           template_folder="./dist")
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route('/artist/<name>')
 def get_artist_score(name):
-    score = Calculator(name).final_score
+    summary = Calculator(name).get_summary()
     response = {
-        'score': score
+        'summary': summary
     }
     return jsonify(response)
 

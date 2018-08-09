@@ -17,8 +17,10 @@
     "babel": "^6.23.0",
     "element-ui": "^2.4.5",
     "vue": "^2.5.16",
+    "vue-global-events": "^1.0.3",
     "vue-router": "^3.0.1",
-    "vue2-highcharts": "^1.2.5"
+    "vue2-highcharts": "^1.2.5",
+    "vuetify": "^1.1.10"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.6",

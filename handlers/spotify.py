@@ -14,6 +14,6 @@ class SpotifyHandler:
         result = sp.search(q='artist:' + self.artist, type='artist')
 
         try:
-            return result['artists']['items'][0]['popularity']
+            return result['artists']['items'][0]
         except Exception as e:
             return False

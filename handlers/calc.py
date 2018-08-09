@@ -5,23 +5,38 @@ from deezer import DeezerHandler
 
 class Calculator:
     def __init__(self, artist):
+        print('Calc instance created!')
         self.artist = artist
-        self.final_score = {}
-        self.execute()
 
-    def execute(self):
+    def get_summary(self):
+        summary = {}
         try:
-            self.get_spotify()
+            summary['spotify.vue'] = self.get_spotify()
+            summary['deezer'] = self.get_deezer()
+            return summary
+
         except Exception as e:
             logging.error(msg=e)
+            return false
 
     def get_spotify(self):
-        spotify = SpotifyHandler(self.artist)
-        spotify_score = spotify.get_artist()
-        self.final_score['spotify'] = spotify_score
+        try:
+            spotify = SpotifyHandler(self.artist)
+            spotify_score = spotify.get_artist()
+            return spotify_score
+
+        except Exception as e:
+            logging.error(msg=e)
+            return false
+
 
     def get_deezer(self):
-        deezer = DeezerHandler(self.artist)
-        deezer_score = deezer.get_artist()
-        self.final_score['deezer'] = deezer_score
+        try:
+            deezer = DeezerHandler(self.artist)
+            deezer_score = deezer.get_artist()
+            return deezer_score
+
+        except Exception as e:
+            logging.error(msg=e)
+        return false
 
