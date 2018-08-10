@@ -2,19 +2,16 @@
   <section class="charts">
     <vue-highcharts :options="pieOptions" ref="pieChart"></vue-highcharts>
 
-    <GlobalEvents @keyup="pieClicked"/>
   </section>
 </template>
 
 <script>
   /* eslint-disable */
   import VueHighcharts from 'vue2-highcharts'
-  import GlobalEvents from 'vue-global-events'
 
   export default {
     components: {
-      VueHighcharts,
-      GlobalEvents
+      VueHighcharts
     },
     props: ['score', 'show'],
 
@@ -38,9 +35,8 @@
                 cursor: 'pointer',
                 point: {
                   events: {
-                    click: function () {
-                      let e = new KeyboardEvent('keyup',{'keyCode':32,'which':32, 'key': this.name});
-                      document.dispatchEvent(e);
+                    click: ({point}) => {
+                      this.$emit('pieClicked', point.name);
                     }
                   }
                 }
@@ -56,11 +52,6 @@
               }
             ]
           }
-      }
-    },
-    methods: {
-      pieClicked(e){
-        this.$emit('pieClicked', e.key);
       }
     },
     watch: {
