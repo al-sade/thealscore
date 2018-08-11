@@ -4,10 +4,15 @@
           <el-button slot="append" icon="el-icon-search" @click="getSummary"></el-button>
     </el-input>
 
-    <chart v-if="showPie" ref="chart" :score="_grades" @pieClicked="pieClicked($event)"></chart>
+      <keep-alive>
+        <chart v-if="showPie" ref="chart" :score="_grades" @pieClicked="pieClicked($event)"></chart>
+      </keep-alive>
 
-    <overlay :summary="_platformSummary" :platform="platform" v-show="showOverlay" @closeOverlay="showOverlay=false">
+          <transition name="el-fade-in-linear">
+
+    <overlay :summary="_platformSummary" :platform="platform" v-if="showOverlay" @closeOverlay="closeOverlay">
     </overlay>
+    </transition>
   </div>
 </template>
 
@@ -50,13 +55,22 @@
       },
       pieClicked(e) {
         this.showOverlay = true;
+        this.showPie = false;
         this.platform = e.toLowerCase();
+      },
+      closeOverlay () {
+        this.showOverlay = false;
+        this.showPie = true;
       }
     },
     computed: {
       _grades(){
         let grades = [];
-        grades['spotify'] = this.summary['spotify']['popularity'];
+        try {
+          grades['spotify'] = this.summary['spotify']['popularity'];
+        } catch (err){
+          return ''
+        }
         return grades;
       },
       _platformSummary () {
