@@ -1,7 +1,7 @@
 import logging
 from spotify import SpotifyHandler
 from deezer import DeezerHandler
-
+import random
 
 class Calculator:
     def __init__(self, artist):
@@ -11,7 +11,7 @@ class Calculator:
     def get_summary(self):
         summary = {}
         try:
-            summary['spotify.vue'] = self.get_spotify()
+            summary['spotify'] = self.get_spotify()
             summary['deezer'] = self.get_deezer()
             return summary
 
@@ -20,6 +20,7 @@ class Calculator:
             return false
 
     def get_spotify(self):
+        # return random.randint(1,100)
         try:
             spotify = SpotifyHandler(self.artist)
             spotify_score = spotify.get_artist()

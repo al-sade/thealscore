@@ -1,14 +1,13 @@
 <template>
-  <div>
-    <input class="tas-search" type="search" v-model="artist"/>
-    <button class="tas-search" @click="getSummary">GO!</button>
+  <div id="home">
+    <el-input class="tas-search" type="search" v-model="artist">
+          <el-button slot="append" icon="el-icon-search" @click="getSummary"></el-button>
+    </el-input>
 
-    <chart v-if="showPie" ref="chart" :score="grades" @pieClicked="pieClicked($event)"></chart>
+    <chart v-if="showPie" ref="chart" :score="_grades" @pieClicked="pieClicked($event)"></chart>
 
-    <div id="overlay" v-show="showOverlay">
-      <button @click="showOverlay = !showOverlay">close</button>
-    </div>
-    <overlay :summary="summary" :platform="platform" v-show="showOverlay"></overlay>
+    <overlay :summary="_platformSummary" :platform="platform" v-show="showOverlay" @closeOverlay="showOverlay=false">
+    </overlay>
   </div>
 </template>
 
@@ -28,6 +27,7 @@
         dataFormat: 'json',
         artist: 'u2',
         platform: '',
+        score: [],
         summary: [],
         grades:[],
         spotifyScore: '',
@@ -41,35 +41,36 @@
         axios.get(path)
           .then(res => {
             this.summary = res.data.summary;
-            this.setGrades(this.summary);
+            this.score = this.summary;
             this.showPie = true;
           })
           .catch(error => {
             console.log(error)
           })
       },
-      setGrades(summary){
-        this.grades['spotify'] = summary.spotify.popularity;
-      },
       pieClicked(e) {
         this.showOverlay = true;
         this.platform = e.toLowerCase();
+      }
+    },
+    computed: {
+      _grades(){
+        let grades = [];
+        grades['spotify'] = this.summary['spotify']['popularity'];
+        return grades;
+      },
+      _platformSummary () {
+        if (this.platform) {
+          return this.summary[this.platform]
+        }
+        return '';
       }
     }
   }
 </script>
 
 <style scoped>
-    #overlay {
-        position: fixed; /* Sit on top of the page content */
-        width: 100%; /* Full width (cover the whole page) */
-        height: 100%; /* Full height (cover the whole page) */
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
-        z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
-        cursor: pointer; /* Add a pointer on hover */
+    .el-input {
+      width: 400px;
     }
 </style>
