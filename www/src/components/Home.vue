@@ -1,17 +1,19 @@
 <template>
   <div id="home">
+        <h1>The Al Score</h1>
     <el-input class="tas-search" type="search" v-model="artist">
           <el-button slot="append" icon="el-icon-search" @click="getSummary"></el-button>
     </el-input>
 
+      <el-collapse-transition>
       <keep-alive>
         <chart v-if="showPie" ref="chart" :score="_grades" @pieClicked="pieClicked($event)"></chart>
       </keep-alive>
+    </el-collapse-transition>
 
-          <transition name="el-fade-in-linear">
-
-    <overlay :summary="_platformSummary" :platform="platform" v-if="showOverlay" @closeOverlay="closeOverlay">
-    </overlay>
+    <transition name="el-fade-in-linear">
+      <overlay :summary="_platformSummary" :platform="platform" v-if="showOverlay" @closeOverlay="closeOverlay">
+      </overlay>
     </transition>
   </div>
 </template>
@@ -66,10 +68,11 @@
     computed: {
       _grades(){
         let grades = [];
+
         try {
-          grades['spotify'] = this.summary['spotify']['popularity'];
+          grades['spotify'] = this.summary['spotify']['spotify_score']['popularity'];
         } catch (err){
-          return ''
+          console.log(err)
         }
         return grades;
       },
@@ -87,4 +90,5 @@
     .el-input {
       width: 400px;
     }
+
 </style>

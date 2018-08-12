@@ -20,12 +20,18 @@ class Calculator:
             return false
 
     def get_spotify(self):
-        # return random.randint(1,100)
         try:
             spotify = SpotifyHandler(self.artist)
             spotify_score = spotify.get_artist()
-            return spotify_score
-
+            spotify_albums = spotify.get_albums()
+            related_artists = spotify.get_artist_related_artists()
+            top_tracks = spotify.get_artist_top_tracks()
+            return {
+                'spotify_score': spotify_score,
+                'spotify_albums': spotify_albums,
+                'related_artists': related_artists,
+                'top_tracks': top_tracks
+            }
         except Exception as e:
             logging.error(msg=e)
             return false
