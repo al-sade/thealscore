@@ -1,7 +1,6 @@
 <template>
   <section class="charts">
     <vue-highcharts :options="pieOptions" ref="pieChart"></vue-highcharts>
-
   </section>
 </template>
 
@@ -19,6 +18,7 @@
       return {
         pieOptions:
           {
+            title: false,
             chart: {
               type: "pie",
               options3d: {
@@ -46,7 +46,7 @@
               {
                 name: "Platform Score",
                 data: [
-                  ["Spotify", 3],
+                  ["Spotify", 4],
                   ["Deezer", 1]
                 ]
               }

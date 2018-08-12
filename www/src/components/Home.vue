@@ -1,14 +1,20 @@
 <template>
-  <div>
-    <input class="tas-search" type="search" v-model="artist"/>
-    <button class="tas-search" @click="getSummary">GO!</button>
+  <div id="home">
+        <h1>The Al Score</h1>
+    <el-input class="tas-search" type="search" v-model="artist">
+          <el-button slot="append" icon="el-icon-search" @click="getSummary"></el-button>
+    </el-input>
 
-    <chart v-if="showPie" ref="chart" :score="grades" @pieClicked="pieClicked($event)"></chart>
+      <el-collapse-transition>
+      <keep-alive>
+        <chart v-if="showPie" ref="chart" :score="_grades" @pieClicked="pieClicked($event)"></chart>
+      </keep-alive>
+    </el-collapse-transition>
 
-    <div id="overlay" v-show="showOverlay">
-      <button @click="showOverlay = !showOverlay">close</button>
-    </div>
-    <overlay :summary="summary" :platform="platform" v-show="showOverlay"></overlay>
+    <transition name="el-fade-in-linear">
+      <overlay :summary="_platformSummary" :platform="platform" v-if="showOverlay" @closeOverlay="closeOverlay">
+      </overlay>
+    </transition>
   </div>
 </template>
 
@@ -28,6 +34,7 @@
         dataFormat: 'json',
         artist: 'u2',
         platform: '',
+        score: [],
         summary: [],
         grades:[],
         spotifyScore: '',
@@ -41,35 +48,47 @@
         axios.get(path)
           .then(res => {
             this.summary = res.data.summary;
-            this.setGrades(this.summary);
+            this.score = this.summary;
             this.showPie = true;
           })
           .catch(error => {
             console.log(error)
           })
       },
-      setGrades(summary){
-        this.grades['spotify'] = summary.spotify.popularity;
-      },
       pieClicked(e) {
         this.showOverlay = true;
+        this.showPie = false;
         this.platform = e.toLowerCase();
+      },
+      closeOverlay () {
+        this.showOverlay = false;
+        this.showPie = true;
+      }
+    },
+    computed: {
+      _grades(){
+        let grades = [];
+
+        try {
+          grades['spotify'] = this.summary['spotify']['spotify_score']['popularity'];
+        } catch (err){
+          console.log(err)
+        }
+        return grades;
+      },
+      _platformSummary () {
+        if (this.platform) {
+          return this.summary[this.platform]
+        }
+        return '';
       }
     }
   }
 </script>
 
 <style scoped>
-    #overlay {
-        position: fixed; /* Sit on top of the page content */
-        width: 100%; /* Full width (cover the whole page) */
-        height: 100%; /* Full height (cover the whole page) */
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
-        z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
-        cursor: pointer; /* Add a pointer on hover */
+    .el-input {
+      width: 400px;
     }
+
 </style>
